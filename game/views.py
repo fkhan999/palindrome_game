@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.decorators import authentication_classes,permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+#from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 import json
 from .serializers import *
@@ -12,7 +13,7 @@ import random
 # Create your views here.
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def startgame(request,*args,**kwargs):
     serializer=palindromeSerializers(data={"user":str(request.user)})
@@ -23,7 +24,7 @@ def startgame(request,*args,**kwargs):
     return Response({"game":serializer.data,"message":"game successfully created"})
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def getBoard(request,id,*args,**kwargs):
     obj=palindrome.objects.filter(id=id,user=str(request.user))
@@ -33,7 +34,7 @@ def getBoard(request,id,*args,**kwargs):
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def updateBoard(request,id,*args,**kwargs):
     try:
@@ -68,7 +69,7 @@ def updateBoard(request,id,*args,**kwargs):
     return Response({"games":id,"message":"string successfully appended","string":obj.string})
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def getGames(request,*args,**kwargs):
     obj=palindrome.objects.filter(user=str(request.user))

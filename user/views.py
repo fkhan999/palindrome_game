@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.decorators import authentication_classes,permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 import json
 from .serializers import *
@@ -38,7 +39,7 @@ def createUser(request,*args,**kwargs):
 
 
 @api_view(['DELETE'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def deleteUser(request,*args,**kwargs):
     obj=User.objects.get(username=request.user)
@@ -46,7 +47,7 @@ def deleteUser(request,*args,**kwargs):
     return Response({"message":"User deleted succesfully"},status=200)
 
 @api_view(['PUT'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def updateUser(request,*args,**kwargs):
     try:
